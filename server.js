@@ -1,9 +1,9 @@
-var express = require('express');
-var passport = require('passport');
-var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-var config = require('./config');
-var app = express();
-var googleProfile = {};
+const express = require('express');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const config = require('./config');
+const app = express();
+let googleProfile = {};
 
 passport.serializeUser(function(user, done) {
     done(null, user);
@@ -14,7 +14,7 @@ passport.deserializeUser(function(obj, done) {
 
 passport.use(new GoogleStrategy({
         clientID: config.GOOGLE_CLIENT_ID,
-        clientSecret:config.GOOGLE_CLIENT_SECRET,
+        clientSecret: config.GOOGLE_CLIENT_SECRET,
         callbackURL: config.CALLBACK_URL
     },
     function(accessToken, refreshToken, profile, cb) {
@@ -51,3 +51,7 @@ app.get('/auth/google/callback',
     }));
 
 app.listen(3000);
+
+app.use(function (req, res, next) {
+    res.status(404).send('Page not found!')
+});
